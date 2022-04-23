@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build && vue-tsc --noEmit || true && cp src/extra/mount/index.html dist/index.html",
+    "host": "pnpm run build && cd src/extra/mount && docker compose up",
     "preview": "vite preview"
   },
   "dependencies": {
