@@ -1,4 +1,4 @@
-import { mount, flushPromises } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import HelloWorld from "../../src/components/HelloWorld.vue";
 
 describe("HelloWorld checkbox behaviour", () => {
@@ -8,16 +8,19 @@ describe("HelloWorld checkbox behaviour", () => {
       props: {
         selectionHandler,
       },
+      attachTo: document.body,
     });
-    const containerCheckbox = wrapper.find<HTMLInputElement>(
-      'input[type="checkbox"]'
-    );
-    await containerCheckbox.trigger("click");
-    //await containerCheckbox.trigger("change"); //jsdom BUG? this should not be necessary
 
-    await flushPromises();
+    try {
+      const containerCheckbox = wrapper.find<HTMLInputElement>(
+        'input[type="checkbox"]'
+      );
+      await containerCheckbox.trigger("click");
 
-    expect(selectionHandler).toHaveBeenCalledTimes(1);
-    expect(selectionHandler).toHaveBeenCalledWith(true);
+      expect(selectionHandler).toHaveBeenCalledTimes(1);
+      expect(selectionHandler).toHaveBeenCalledWith(true);
+    } finally {
+      wrapper.unmount();
+    }
   });
 });
